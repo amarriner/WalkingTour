@@ -4,3 +4,4 @@ convert -delay 100 -loop 0 combo* new.gif
 rm combo*jpg
 rm step*jpg
 rm map*jpg
+rm walk*.jpg
