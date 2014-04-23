@@ -31,7 +31,15 @@ for i in range(int(step_index),int(step_index) + 1):
    # Debug output for given step
    print '-------------------------------------------------------------------------------------------------------'
    instructions = re.sub(r'<[^>]*>', r"", step['html_instructions'])
-   print str(i + 1) + '. ' + instructions + ' (' + str(step['distance']['text']) + ')'
+
+   if len(step['html_instructions']) > 140:
+      end = step['html_instructions'].find('<div')
+      instructions = re.sub(r'<[^>]*>', r"", step['html_instructions'][:end])
+
+   step['duration']['text'] = step['duration']['text'].replace(' hours', 'h').replace(' mins', 'm')
+   tweet = str(i + 1) + '. ' + instructions + ' (' + step['distance']['text'] + ', ' + \
+                                                     step['duration']['text'] + ')'
+   print tweet
 
    # Get a google street view image looking north, east, south, and west
    for x in range(0, 4):
@@ -62,9 +70,9 @@ for i in range(int(step_index),int(step_index) + 1):
    print walk_url
    urllib.urlretrieve(walk_url, 'walk.jpg')
 
-   #f = open(step_index_file, 'w')
-   # f.write(str(int(step_index) + 1))
-   #f.close()
+   f = open(step_index_file, 'w')
+   f.write(str(int(step_index) + 1))
+   f.close()
 
 print '-------------------------------------------------------------------------------------------------------'
 
