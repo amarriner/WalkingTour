@@ -1,3 +1,6 @@
 #!/bin/sh
 
-convert -delay 100 -loop 0 combo* ~/public_html/new.gif
+convert -delay 100 -loop 0 combo* new.gif
+rm combo*jpg
+rm step*jpg
+rm map*jpg
