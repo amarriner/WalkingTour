@@ -1,8 +1,10 @@
 #!/usr/bin/python
 
-from PIL import Image
+from PIL import Image, ImageDraw
 import json
 import math
+import os.path
+import re
 import subprocess
 import urllib
 
@@ -12,15 +14,24 @@ f = open('directions.json')
 directions = json.loads(f.read())
 f.close
 
+# Get current step
+step_index = 0
+step_index_file = 'step.index'
+if os.path.isfile(step_index_file):
+   f = open(step_index_file)
+   step_index = f.read()
+   f.close()
+
 # Loop through the steps 
-for i in range(102,103):
+for i in range(int(step_index),int(step_index) + 1):
 
    # Get the current step for readability 
    step = directions['routes'][0]['legs'][0]['steps'][i]
 
    # Debug output for given step
    print '-------------------------------------------------------------------------------------------------------'
-   print str(i + 1) + '. ' + step['html_instructions']
+   instructions = re.sub(r'<[^>]*>', r"", step['html_instructions'])
+   print str(i + 1) + '. ' + instructions + ' (' + str(step['distance']['text']) + ')'
 
    # Get a google street view image looking north, east, south, and west
    for x in range(0, 4):
@@ -47,11 +58,13 @@ for i in range(102,103):
               ',' + str(step['start_location']['lng']) + '&'                                  + \
               'markers=color:0x2222dd|label:2|' + str(step['end_location']['lat'])            + \
               ',' + str(step['end_location']['lng']) + '&'                                    + \
-              'path=geodesic:true|color:0x0000ff60|weight:4|'                                 + \
-              str(step['start_location']['lat']) + ',' + str(step['start_location']['lng'])   + \
-              '|' + str(step['end_location']['lat']) + ',' + str(step['end_location']['lng'])
+              'path=color:0x0000ff60|weight:4|enc:' + step['polyline']['points']
    print walk_url
    urllib.urlretrieve(walk_url, 'walk.jpg')
+
+   #f = open(step_index_file, 'w')
+   # f.write(str(int(step_index) + 1))
+   #f.close()
 
 print '-------------------------------------------------------------------------------------------------------'
 
@@ -62,10 +75,12 @@ for x in range(0, 4):
    angle = x* 90
    step_image = Image.open('step' + str(angle) + '.jpg')
 
-   combo = Image.new(step_image.mode, (960, 480))
-   combo.paste(step_image, (0, 0))
-   combo.paste(map_image, (480, 0))
-   combo.paste(walk_image, (480, 240))
+   combo = Image.new(step_image.mode, (963, 483))
+   draw = ImageDraw.Draw(combo)
+   draw.rectangle([0, 0, 962, 482], fill='#8888dd')
+   combo.paste(step_image, (1, 1))
+   combo.paste(map_image, (482, 1))
+   combo.paste(walk_image, (482, 242))
 
    combo.save('combo' + str(angle) + '.jpg', 'jpeg')
 
