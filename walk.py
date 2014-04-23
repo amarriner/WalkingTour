@@ -18,16 +18,6 @@ for i in range(102,103):
    # Get the current step for readability 
    step = directions['routes'][0]['legs'][0]['steps'][i]
 
-   # Attempt to determine bearing
-   x1 = step['start_location']['lat']
-   y1 = step['start_location']['lng']
-   x2 = step['end_location']['lat']
-   y2 = step['end_location']['lng']
-
-   y = math.sin(y2 - y1) * math.cos(x2);
-   x = math.cos(x1) * math.sin(x2) - math.sin(x1) * math.cos(x2) * math.cos(y2 - y1);
-   brng = math.degrees(math.atan2(y, x))
-
    # Debug output for given step
    print '-------------------------------------------------------------------------------------------------------'
    print str(i + 1) + '. ' + step['html_instructions']
