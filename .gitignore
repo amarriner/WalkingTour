@@ -1,4 +1,5 @@
 *.gif
 *.jpg
+keys.py*
 place.*
 step.index
