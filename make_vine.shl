@@ -1,0 +1,3 @@
+# http://askubuntu.com/questions/293444/how-can-i-quickly-convert-a-gif-file-to-a-video
+
+avconv -r 60 -i frames/combo%02d.jpg -s 640x480 -qscale 4 ~/public_html/vine.mp4
