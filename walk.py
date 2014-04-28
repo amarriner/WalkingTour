@@ -50,7 +50,7 @@ for i in range(int(step_index),int(step_index) + 1):
       heading = x * 90
       step_url = 'http://maps.googleapis.com/maps/api/streetview?size=240x240&sensor=false&location=' + \
                     str(step['end_location']['lat']) + ',' + str(step['end_location']['lng']) + \
-                    '&heading=' + str(heading)
+                    '&heading=' + str(heading) + '&key=' + keys.google_api_key
 
       print step_url
       urllib.urlretrieve(step_url, pwd + 'step' + str(heading) + '.jpg')
@@ -58,15 +58,17 @@ for i in range(int(step_index),int(step_index) + 1):
    # Get a static map of the end location at a high zoom
    map_url = 'http://maps.googleapis.com/maps/api/staticmap?size=480x240&sensor=false&zoom=6&center=' + \
                 str(step['end_location']['lat']) + ',' + str(step['end_location']['lng']) + \
-                '&markers=' + str(step['end_location']['lat']) + ',' + str(step['end_location']['lng'])
+                '&markers=' + str(step['end_location']['lat']) + ',' + str(step['end_location']['lng']) + \
+                '&key=' + keys.google_api_key
    print map_url
    urllib.urlretrieve(map_url, pwd + 'map.jpg')
 
    # Get a static map of the path of the step at a closer zoom
    walk_url = 'http://maps.googleapis.com/maps/api/staticmap?'                                + \
               'sensor=false&'                                                                 + \
-              'format=jpg&'                                                                  + \
+              'format=jpg&'                                                                   + \
               'size=480x240&'                                                                 + \
+              'key=' + keys.google_api_key + '&'                                              + \
               'markers=color:0x2222dd|label:1|' + str(step['start_location']['lat'])          + \
               ',' + str(step['start_location']['lng']) + '&'                                  + \
               'markers=color:0x2222dd|label:2|' + str(step['end_location']['lat'])            + \
